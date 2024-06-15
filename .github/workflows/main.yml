@@ -1,0 +1,36 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master  # Change branch name if necessary
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # Choose Node.js version suitable for your project
+
+      - name: Install dependencies
+        run: |
+          cd demo
+          npm install
+
+      - name: Build project
+        run: |
+          cd demo
+          npm run build  # Adjust build script if necessary
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages  # GitHub Pages branch
+          FOLDER: demo/dist  # Adjust folder path where Vue project builds
+
